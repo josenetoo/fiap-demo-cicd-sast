@@ -36,5 +36,12 @@ def get_user_safe():
     result = conn.execute("SELECT * FROM users WHERE id = ?", (user_id,)).fetchall()
     return str(result)
 
+# ❌ VULNERABILIDADE 4: Path Traversal
+@app.route('/file')
+def read_file():
+    filename = request.args.get('name')
+    with open(f"/var/data/{filename}", 'r') as f:
+        return f.read()
+
 if __name__ == '__main__':
     app.run(debug=True)
